@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Portal - Customer Enquiry Inbox</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #007bff 0%, #6610f2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .welcome-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+        .welcome-card {
+            max-width: 500px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 50px 45px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        .logo-icon {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, #007bff 0%, #6610f2 100%);
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            box-shadow: 0 12px 35px rgba(0, 123, 255, 0.3);
+        }
+        .logo-icon i {
+            font-size: 40px;
+            color: #fff;
+        }
+        .welcome-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 10px;
+        }
+        .welcome-subtitle {
+            color: #6c757d;
+            font-size: 1rem;
+            margin-bottom: 35px;
+        }
+        .btn-group-auth {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn-auth {
+            padding: 14px 35px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        .btn-signin {
+            background: linear-gradient(135deg, #007bff 0%, #6610f2 100%);
+            border: none;
+            color: #fff;
+            box-shadow: 0 8px 25px rgba(0, 123, 255, 0.3);
+        }
+        .btn-signin:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(0, 123, 255, 0.4);
+            color: #fff;
+        }
+        .btn-register {
+            background: transparent;
+            border: 2px solid #007bff;
+            color: #007bff;
+        }
+        .btn-register:hover {
+            background: rgba(0, 123, 255, 0.1);
+            color: #007bff;
+            transform: translateY(-2px);
+        }
+        .credentials-box {
+            background: linear-gradient(135deg, rgba(0, 123, 255, 0.1) 0%, rgba(102, 16, 242, 0.1) 100%);
+            border: 1px solid rgba(0, 123, 255, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 30px;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+        .credentials-box strong {
+            color: #007bff;
+        }
+        .nav-links {
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px solid #e9ecef;
+        }
+        .nav-links a {
+            color: #6c757d;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .nav-links a:hover {
+            color: #007bff;
+        }
+        .nav-links i {
+            margin-right: 6px;
+        }
+        .modal-content {
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+        }
+        .modal-header {
+            border-bottom: 1px solid #e9ecef;
+            padding: 25px 30px 20px;
+        }
+        .modal-title {
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+        .modal-title i {
+            color: #007bff;
+        }
+        .modal-body {
+            padding: 30px;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+        }
+        .form-label i {
+            color: #007bff;
+            margin-right: 6px;
+        }
+        .form-control {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.1);
+        }
+        .input-group .form-control {
+            border-right: none;
+        }
+        .password-toggle {
+            cursor: pointer;
+            background: #fff;
+            border: 2px solid #e9ecef;
+            border-left: none;
+            border-radius: 0 10px 10px 0;
+            transition: all 0.3s ease;
+        }
+        .password-toggle:hover {
+            background: #f8f9fa;
+            color: #007bff;
+        }
+        .btn-modal-submit {
+            background: linear-gradient(135deg, #007bff 0%, #6610f2 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 123, 255, 0.3);
+        }
+        .btn-modal-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(0, 123, 255, 0.4);
+        }
+        .message-box {
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        .message-error {
+            background: linear-gradient(135deg, rgba(220, 53, 69, 0.1) 0%, rgba(253, 126, 20, 0.1) 100%);
+            color: #842029;
+            border: 1px solid rgba(220, 53, 69, 0.2);
+        }
+        .message-success {
+            background: linear-gradient(135deg, rgba(40, 167, 69, 0.1) 0%, rgba(32, 201, 151, 0.1) 100%);
+            color: #0f5132;
+            border: 1px solid rgba(40, 167, 69, 0.2);
+        }
+        .hidden {
+            display: none;
+        }
+        .dashboard-container {
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+        .dashboard-content {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .header-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px 35px;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+        .header-icon {
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, #007bff 0%, #6610f2 100%);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 25px rgba(0, 123, 255, 0.3);
+        }
+        .header-icon i {
+            font-size: 24px;
+            color: #fff;
+        }
+        .header-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 3px;
+        }
+        .header-user {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        .btn-logout {
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-logout:hover {
+            background: #dc3545;
+            color: #fff;
+        }
+        .filter-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+        .filter-card .form-select {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-weight: 500;
+        }
+        .filter-card .form-select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.1);
+        }
+        .enquiry-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 18px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid #007bff;
+            transition: all 0.3s ease;
+        }
+        .enquiry-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+        }
+        .enquiry-card.status-new {
+            border-left-color: #007bff;
+        }
+        .enquiry-card.status-in-progress {
+            border-left-color: #ffc107;
+        }
+        .enquiry-card.status-resolved {
+            border-left-color: #28a745;
+        }
+        .enquiry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .enquiry-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 5px;
+        }
+        .enquiry-email {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        .status-badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .enquiry-message {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 15px 18px;
+            border-radius: 12px;
+            margin: 15px 0;
+            color: #495057;
+            line-height: 1.6;
+        }
+        .enquiry-time {
+            color: #6c757d;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+        }
+        .enquiry-actions {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e9ecef;
+        }
+        .enquiry-actions .form-label {
+            font-size: 0.85rem;
+            margin-bottom: 6px;
+        }
+        .enquiry-actions .form-select,
+        .enquiry-actions .form-control {
+            font-size: 0.9rem;
+            padding: 10px 14px;
+        }
+        .btn-save-notes {
+            background: linear-gradient(135deg, #007bff 0%, #6610f2 100%);
+            border: none;
+            color: #fff;
+            padding: 10px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .btn-save-notes:hover {
+            transform: scale(1.05);
+            color: #fff;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+        .empty-state i {
+            font-size: 60px;
+            color: #dee2e6;
+            margin-bottom: 20px;
+        }
+        .empty-state p {
+            color: #6c757d;
+            font-size: 1.1rem;
+        }
+        .dashboard-nav {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .dashboard-nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 12px;
+            font-weight: 500;
+            padding: 12px 25px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        .dashboard-nav a:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        @media (max-width: 768px) {
+            .header-card {
+                flex-direction: column;
+                text-align: center;
+            }
+            .header-left {
+                flex-direction: column;
+            }
+            .enquiry-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Welcome Section -->
+    <div id="welcomeSection">
+        <div class="welcome-container">
+            <div class="welcome-card">
+                <div class="logo-icon">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <h1 class="welcome-title">Staff Portal</h1>
+                <p class="welcome-subtitle">Sign in or register to access the enquiry dashboard</p>
+                
+                <div class="btn-group-auth">
+                    <button class="btn btn-auth btn-signin" data-bs-toggle="modal" data-bs-target="#loginModal">
+                        <i class="fas fa-sign-in-alt me-2"></i> Sign In
+                    </button>
+                    <button class="btn btn-auth btn-register" data-bs-toggle="modal" data-bs-target="#registerModal">
+                        <i class="fas fa-user-plus me-2"></i> Register
+                    </button>
+                </div>
+
+                <div class="credentials-box">
+                    <strong><i class="fas fa-info-circle me-1"></i> Demo Credentials:</strong><br>
+                    <div class="mt-2">
+                        <i class="fas fa-envelope me-1"></i> Email: staff@enquiry.com<br>
+                        <i class="fas fa-lock me-1"></i> Password: staff123
+                    </div>
+                </div>
+
+                <div class="nav-links">
+                    <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                    <a href="public.html"><i class="fas fa-paper-plane"></i> Submit Enquiry</a>
+                    <a href="insights.html"><i class="fas fa-chart-pie"></i> Insights</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginModalLabel">
+                        <i class="fas fa-sign-in-alt me-2"></i> Staff Sign In
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="loginError" class="message-box message-error hidden"></div>
+                    
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="loginEmail" class="form-label">
+                                <i class="fas fa-envelope"></i> Email
+                            </label>
+                            <input type="email" class="form-control" id="loginEmail" placeholder="Enter your email" required>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="loginPassword" class="form-label">
+                                <i class="fas fa-lock"></i> Password
+                            </label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="loginPassword" placeholder="Enter your password" required>
+                                <span class="input-group-text password-toggle" onclick="togglePassword('loginPassword', this)">
+                                    <i class="fas fa-eye"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-modal-submit" id="loginBtn">
+                            <i class="fas fa-sign-in-alt me-2"></i> Sign In
+                        </button>
+                    </form>
+
+                    <div class="text-center mt-4">
+                        <span class="text-muted">Don't have an account?</span>
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#registerModal" data-bs-dismiss="modal" style="color: #007bff; font-weight: 600;">Register here</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="registerModalLabel">
+                        <i class="fas fa-user-plus me-2"></i> Staff Registration
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="registerError" class="message-box message-error hidden"></div>
+                    <div id="registerSuccess" class="message-box message-success hidden"></div>
+                    
+                    <form id="registerForm">
+                        <div class="mb-3">
+                            <label for="registerEmail" class="form-label">
+                                <i class="fas fa-envelope"></i> Email
+                            </label>
+                            <input type="email" class="form-control" id="registerEmail" placeholder="Enter your email" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="registerPassword" class="form-label">
+                                <i class="fas fa-lock"></i> Password
+                            </label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="registerPassword" placeholder="Create a password (min 6 characters)" required minlength="6">
+                                <span class="input-group-text password-toggle" onclick="togglePassword('registerPassword', this)">
+                                    <i class="fas fa-eye"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="confirmPassword" class="form-label">
+                                <i class="fas fa-lock"></i> Confirm Password
+                            </label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password" required>
+                                <span class="input-group-text password-toggle" onclick="togglePassword('confirmPassword', this)">
+                                    <i class="fas fa-eye"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-modal-submit" id="registerBtn">
+                            <i class="fas fa-user-plus me-2"></i> Create Account
+                        </button>
+                    </form>
+
+                    <div class="text-center mt-4">
+                        <span class="text-muted">Already have an account?</span>
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal" data-bs-dismiss="modal" style="color: #007bff; font-weight: 600;">Sign in here</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Section -->
+    <div id="dashboardSection" class="hidden">
+        <div class="dashboard-container">
+            <div class="dashboard-content">
+                <div class="header-card">
+                    <div class="header-left">
+                        <div class="header-icon">
+                            <i class="fas fa-inbox"></i>
+                        </div>
+                        <div>
+                            <h1 class="header-title">Enquiry Dashboard</h1>
+                            <p class="header-user"><i class="fas fa-user me-1"></i> <span id="userEmail"></span></p>
+                        </div>
+                    </div>
+                    <button class="btn btn-logout" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt me-2"></i> Logout
+                    </button>
+                </div>
+
+                <div class="filter-card">
+                    <div class="row align-items-center">
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <span class="input-group-text" style="border: 2px solid #e9ecef; border-right: none; border-radius: 10px 0 0 10px; background: #fff;">
+                                    <i class="fas fa-filter text-primary"></i>
+                                </span>
+                                <select class="form-select" id="statusFilter" style="border-left: none;">
+                                    <option value="all">All Statuses</option>
+                                    <option value="New">New</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Resolved">Resolved</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="enquiriesList">
+                    <div class="empty-state">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Loading enquiries...</p>
+                    </div>
+                </div>
+
+                <div class="dashboard-nav">
+                    <a href="index.html"><i class="fas fa-home me-1"></i> Home</a>
+                    <a href="public.html"><i class="fas fa-paper-plane me-1"></i> Submit Enquiry</a>
+                    <a href="insights.html"><i class="fas fa-chart-pie me-1"></i> Insights</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        function togglePassword(inputId, toggleElement) {
+            var input = document.getElementById(inputId);
+            var icon = toggleElement.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC3P1Q0t0FRHb6iLuDYopQvL8jMA285XDM",
+            authDomain: "customer-enquiry-inbox-52174.firebaseapp.com",
+            projectId: "customer-enquiry-inbox-52174",
+            storageBucket: "customer-enquiry-inbox-52174.firebasestorage.app",
+            messagingSenderId: "881742221818",
+            appId: "1:881742221818:web:46dfe2addf53ebc55ed443"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        const welcomeSection = document.getElementById('welcomeSection');
+        const dashboardSection = document.getElementById('dashboardSection');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const loginError = document.getElementById('loginError');
+        const registerError = document.getElementById('registerError');
+        const registerSuccess = document.getElementById('registerSuccess');
+        const loginBtn = document.getElementById('loginBtn');
+        const registerBtn = document.getElementById('registerBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const userEmailSpan = document.getElementById('userEmail');
+        const enquiriesList = document.getElementById('enquiriesList');
+        const statusFilter = document.getElementById('statusFilter');
+
+        const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+        const registerModal = new bootstrap.Modal(document.getElementById('registerModal'));
+
+        let allEnquiries = [];
+        let unsubscribe = null;
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                welcomeSection.classList.add('hidden');
+                dashboardSection.classList.remove('hidden');
+                userEmailSpan.textContent = user.email;
+                loginModal.hide();
+                registerModal.hide();
+                startListening();
+            } else {
+                welcomeSection.classList.remove('hidden');
+                dashboardSection.classList.add('hidden');
+                if (unsubscribe) {
+                    unsubscribe();
+                    unsubscribe = null;
+                }
+            }
+        });
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            loginError.classList.add('hidden');
+
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Signing in...';
+
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                loginForm.reset();
+            } catch (error) {
+                let errorMessage = 'Invalid email or password. Please try again.';
+                if (error.code === 'auth/user-not-found') {
+                    errorMessage = 'No account found with this email.';
+                } else if (error.code === 'auth/wrong-password') {
+                    errorMessage = 'Incorrect password. Please try again.';
+                } else if (error.code === 'auth/too-many-requests') {
+                    errorMessage = 'Too many failed attempts. Please try again later.';
+                }
+                loginError.textContent = errorMessage;
+                loginError.classList.remove('hidden');
+            }
+
+            loginBtn.disabled = false;
+            loginBtn.innerHTML = '<i class="fas fa-sign-in-alt me-2"></i> Sign In';
+        });
+
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            registerError.classList.add('hidden');
+            registerSuccess.classList.add('hidden');
+
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                registerError.textContent = 'Passwords do not match.';
+                registerError.classList.remove('hidden');
+                return;
+            }
+
+            if (password.length < 6) {
+                registerError.textContent = 'Password must be at least 6 characters.';
+                registerError.classList.remove('hidden');
+                return;
+            }
+
+            registerBtn.disabled = true;
+            registerBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Creating account...';
+
+            try {
+                await createUserWithEmailAndPassword(auth, email, password);
+                registerForm.reset();
+            } catch (error) {
+                let errorMessage = 'Failed to create account. Please try again.';
+                if (error.code === 'auth/email-already-in-use') {
+                    errorMessage = 'An account with this email already exists.';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = 'Invalid email address format.';
+                } else if (error.code === 'auth/weak-password') {
+                    errorMessage = 'Password is too weak. Use at least 6 characters.';
+                }
+                registerError.textContent = errorMessage;
+                registerError.classList.remove('hidden');
+            }
+
+            registerBtn.disabled = false;
+            registerBtn.innerHTML = '<i class="fas fa-user-plus me-2"></i> Create Account';
+        });
+
+        logoutBtn.addEventListener('click', () => {
+            signOut(auth);
+        });
+
+        function startListening() {
+            const q = query(collection(db, 'enquiries'), orderBy('createdAt', 'desc'));
+
+            unsubscribe = onSnapshot(q, (snapshot) => {
+                allEnquiries = [];
+                snapshot.forEach((docSnap) => {
+                    allEnquiries.push({ id: docSnap.id, ...docSnap.data() });
+                });
+                renderEnquiries();
+            }, (error) => {
+                console.error('Error listening to enquiries:', error);
+                enquiriesList.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle" style="color: #dc3545;"></i><p>Error loading enquiries. Please refresh the page.</p></div>';
+            });
+        }
+
+        statusFilter.addEventListener('change', renderEnquiries);
+
+        function renderEnquiries() {
+            const filterValue = statusFilter.value;
+            let filtered = allEnquiries;
+
+            if (filterValue !== 'all') {
+                filtered = allEnquiries.filter(e => e.status === filterValue);
+            }
+
+            if (filtered.length === 0) {
+                enquiriesList.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>No enquiries found.</p></div>';
+                return;
+            }
+
+            let html = '';
+            filtered.forEach((enquiry) => {
+                const statusClass = enquiry.status === 'New' ? 'status-new' : 
+                                   enquiry.status === 'In Progress' ? 'status-in-progress' : 'status-resolved';
+                const badgeClass = enquiry.status === 'New' ? 'bg-primary' : 
+                                  enquiry.status === 'In Progress' ? 'bg-warning text-dark' : 'bg-success';
+
+                const createdDate = enquiry.createdAt ? new Date(enquiry.createdAt.seconds * 1000).toLocaleString() : 'N/A';
+
+                html += `
+                    <div class="enquiry-card ${statusClass}">
+                        <div class="enquiry-header">
+                            <div>
+                                <h5 class="enquiry-name"><i class="fas fa-user me-2 text-primary"></i>${escapeHtml(enquiry.name)}</h5>
+                                <p class="enquiry-email"><i class="fas fa-envelope me-1"></i>${escapeHtml(enquiry.email)}</p>
+                            </div>
+                            <span class="badge ${badgeClass} status-badge">${escapeHtml(enquiry.status)}</span>
+                        </div>
+                        <div class="enquiry-message">
+                            <i class="fas fa-comment-dots me-2 text-muted"></i>${escapeHtml(enquiry.message)}
+                        </div>
+                        <p class="enquiry-time"><i class="fas fa-clock me-1"></i>${createdDate}</p>
+                        
+                        <div class="enquiry-actions">
+                            <div>
+                                <label class="form-label">Update Status</label>
+                                <select class="form-select" data-id="${enquiry.id}" onchange="window.updateStatus(this)">
+                                    <option value="New" ${enquiry.status === 'New' ? 'selected' : ''}>New</option>
+                                    <option value="In Progress" ${enquiry.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
+                                    <option value="Resolved" ${enquiry.status === 'Resolved' ? 'selected' : ''}>Resolved</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="form-label">Internal Notes</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="notes-${enquiry.id}" value="${escapeHtml(enquiry.internalNotes || '')}" placeholder="Add internal notes...">
+                                    <button class="btn btn-save-notes" onclick="window.updateNotes('${enquiry.id}')">
+                                        <i class="fas fa-save"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            enquiriesList.innerHTML = html;
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        window.updateStatus = async function(selectElement) {
+            const docId = selectElement.dataset.id;
+            const newStatus = selectElement.value;
+
+            try {
+                await updateDoc(doc(db, 'enquiries', docId), {
+                    status: newStatus,
+                    updatedAt: serverTimestamp()
+                });
+            } catch (error) {
+                console.error('Error updating status:', error);
+                alert('Error updating status. Please try again.');
+            }
+        };
+
+        window.updateNotes = async function(docId) {
+            const notesInput = document.getElementById('notes-' + docId);
+            const notes = notesInput.value;
+
+            try {
+                await updateDoc(doc(db, 'enquiries', docId), {
+                    internalNotes: notes,
+                    updatedAt: serverTimestamp()
+                });
+                alert('Notes saved successfully.');
+            } catch (error) {
+                console.error('Error updating notes:', error);
+                alert('Error saving notes. Please try again.');
+            }
+        };
+    </script>
+</body>
+</html>

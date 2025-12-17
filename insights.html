@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insights Dashboard - Customer Enquiry Inbox</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #fd7e14 0%, #dc3545 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 30px 20px;
+        }
+        .insights-container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .header-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px 40px;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #fd7e14 0%, #dc3545 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 25px rgba(253, 126, 20, 0.3);
+        }
+        .logo-icon i {
+            font-size: 28px;
+            color: #fff;
+        }
+        .header-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 5px;
+        }
+        .header-subtitle {
+            color: #6c757d;
+            font-size: 1rem;
+        }
+        .live-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(40, 167, 69, 0.1);
+            padding: 10px 20px;
+            border-radius: 30px;
+        }
+        .live-dot {
+            width: 12px;
+            height: 12px;
+            background: #28a745;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
+            50% { opacity: 0.8; box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); }
+            100% { opacity: 1; box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
+        }
+        .live-text {
+            font-weight: 600;
+            color: #28a745;
+        }
+        .last-updated {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+        }
+        .stat-card.total::before {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+        .stat-card.new::before {
+            background: linear-gradient(90deg, #007bff, #6610f2);
+        }
+        .stat-card.progress::before {
+            background: linear-gradient(90deg, #ffc107, #fd7e14);
+        }
+        .stat-card.resolved::before {
+            background: linear-gradient(90deg, #28a745, #20c997);
+        }
+        .stat-card.hours::before {
+            background: linear-gradient(90deg, #6f42c1, #e83e8c);
+        }
+        .stat-card.rate::before {
+            background: linear-gradient(90deg, #17a2b8, #20c997);
+        }
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 26px;
+        }
+        .stat-card.total .stat-icon {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+        .stat-card.new .stat-icon {
+            background: rgba(0, 123, 255, 0.1);
+            color: #007bff;
+        }
+        .stat-card.progress .stat-icon {
+            background: rgba(255, 193, 7, 0.1);
+            color: #ffc107;
+        }
+        .stat-card.resolved .stat-icon {
+            background: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+        }
+        .stat-card.hours .stat-icon {
+            background: rgba(111, 66, 193, 0.1);
+            color: #6f42c1;
+        }
+        .stat-card.rate .stat-icon {
+            background: rgba(23, 162, 184, 0.1);
+            color: #17a2b8;
+        }
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 5px;
+        }
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+        .distribution-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            margin-bottom: 25px;
+        }
+        .distribution-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .distribution-title i {
+            color: #fd7e14;
+        }
+        .progress-container {
+            margin-bottom: 25px;
+        }
+        .progress {
+            height: 35px;
+            border-radius: 10px;
+            background: #e9ecef;
+            overflow: hidden;
+        }
+        .progress-bar {
+            font-size: 0.85rem;
+            font-weight: 600;
+            line-height: 35px;
+            transition: width 0.5s ease;
+        }
+        .progress-bar.bg-primary {
+            background: linear-gradient(90deg, #007bff, #6610f2) !important;
+        }
+        .progress-bar.bg-warning {
+            background: linear-gradient(90deg, #ffc107, #fd7e14) !important;
+        }
+        .progress-bar.bg-success {
+            background: linear-gradient(90deg, #28a745, #20c997) !important;
+        }
+        .legend-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .legend-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 4px;
+        }
+        .legend-dot.new {
+            background: linear-gradient(90deg, #007bff, #6610f2);
+        }
+        .legend-dot.progress {
+            background: linear-gradient(90deg, #ffc107, #fd7e14);
+        }
+        .legend-dot.resolved {
+            background: linear-gradient(90deg, #28a745, #20c997);
+        }
+        .legend-text {
+            font-weight: 500;
+            color: #495057;
+        }
+        .legend-percent {
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+        .nav-links {
+            text-align: center;
+            padding: 20px;
+        }
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 500;
+            padding: 12px 25px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        .nav-links i {
+            margin-right: 8px;
+        }
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .header-left {
+                flex-direction: column;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="insights-container">
+        <div class="header-card">
+            <div class="header-content">
+                <div class="header-left">
+                    <div class="logo-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <div>
+                        <h1 class="header-title">Insights Dashboard</h1>
+                        <p class="header-subtitle">Real-time operational metrics and analytics</p>
+                    </div>
+                </div>
+                <div class="live-status">
+                    <div class="live-dot"></div>
+                    <div>
+                        <div class="live-text">Live Data</div>
+                        <div class="last-updated" id="lastUpdated">Connecting...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card total">
+                <div class="stat-icon"><i class="fas fa-envelope"></i></div>
+                <div class="stat-value" id="totalEnquiries">-</div>
+                <div class="stat-label">Total Enquiries</div>
+            </div>
+            <div class="stat-card new">
+                <div class="stat-icon"><i class="fas fa-plus-circle"></i></div>
+                <div class="stat-value" id="newCount">-</div>
+                <div class="stat-label">New</div>
+            </div>
+            <div class="stat-card progress">
+                <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                <div class="stat-value" id="inProgressCount">-</div>
+                <div class="stat-label">In Progress</div>
+            </div>
+            <div class="stat-card resolved">
+                <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                <div class="stat-value" id="resolvedCount">-</div>
+                <div class="stat-label">Resolved</div>
+            </div>
+            <div class="stat-card hours">
+                <div class="stat-icon"><i class="fas fa-calendar-day"></i></div>
+                <div class="stat-value" id="last24Hours">-</div>
+                <div class="stat-label">Last 24 Hours</div>
+            </div>
+            <div class="stat-card rate">
+                <div class="stat-icon"><i class="fas fa-percentage"></i></div>
+                <div class="stat-value" id="resolutionRate">-</div>
+                <div class="stat-label">Resolution Rate</div>
+            </div>
+        </div>
+
+        <div class="distribution-card">
+            <h3 class="distribution-title"><i class="fas fa-chart-bar"></i> Status Distribution</h3>
+            <div class="progress-container">
+                <div class="progress">
+                    <div class="progress-bar bg-primary" id="newBar" style="width: 0%">New</div>
+                    <div class="progress-bar bg-warning" id="inProgressBar" style="width: 0%">In Progress</div>
+                    <div class="progress-bar bg-success" id="resolvedBar" style="width: 0%">Resolved</div>
+                </div>
+            </div>
+            <div class="legend-container">
+                <div class="legend-item">
+                    <div class="legend-dot new"></div>
+                    <span class="legend-text">New</span>
+                    <span class="legend-percent" id="newPercent">0%</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot progress"></div>
+                    <span class="legend-text">In Progress</span>
+                    <span class="legend-percent" id="inProgressPercent">0%</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot resolved"></div>
+                    <span class="legend-text">Resolved</span>
+                    <span class="legend-percent" id="resolvedPercent">0%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-links">
+            <a href="index.html"><i class="fas fa-home"></i> Home</a>
+            <a href="public.html"><i class="fas fa-paper-plane"></i> Submit Enquiry</a>
+            <a href="staff.html"><i class="fas fa-user-tie"></i> Staff Portal</a>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, query, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC3P1Q0t0FRHb6iLuDYopQvL8jMA285XDM",
+            authDomain: "customer-enquiry-inbox-52174.firebaseapp.com",
+            projectId: "customer-enquiry-inbox-52174",
+            storageBucket: "customer-enquiry-inbox-52174.firebasestorage.app",
+            messagingSenderId: "881742221818",
+            appId: "1:881742221818:web:46dfe2addf53ebc55ed443"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const totalEnquiries = document.getElementById('totalEnquiries');
+        const newCount = document.getElementById('newCount');
+        const inProgressCount = document.getElementById('inProgressCount');
+        const resolvedCount = document.getElementById('resolvedCount');
+        const last24Hours = document.getElementById('last24Hours');
+        const resolutionRate = document.getElementById('resolutionRate');
+        const newBar = document.getElementById('newBar');
+        const inProgressBar = document.getElementById('inProgressBar');
+        const resolvedBar = document.getElementById('resolvedBar');
+        const newPercent = document.getElementById('newPercent');
+        const inProgressPercent = document.getElementById('inProgressPercent');
+        const resolvedPercent = document.getElementById('resolvedPercent');
+        const lastUpdated = document.getElementById('lastUpdated');
+
+        const q = query(collection(db, 'enquiries'));
+
+        onSnapshot(q, (snapshot) => {
+            let total = 0;
+            let newC = 0;
+            let inProgressC = 0;
+            let resolvedC = 0;
+            let last24C = 0;
+
+            const now = new Date();
+            const twentyFourHoursAgo = new Date(now.getTime() - (24 * 60 * 60 * 1000));
+
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                total++;
+
+                if (data.status === 'New') {
+                    newC++;
+                } else if (data.status === 'In Progress') {
+                    inProgressC++;
+                } else if (data.status === 'Resolved') {
+                    resolvedC++;
+                }
+
+                if (data.createdAt) {
+                    const createdDate = new Date(data.createdAt.seconds * 1000);
+                    if (createdDate >= twentyFourHoursAgo) {
+                        last24C++;
+                    }
+                }
+            });
+
+            totalEnquiries.textContent = total;
+            newCount.textContent = newC;
+            inProgressCount.textContent = inProgressC;
+            resolvedCount.textContent = resolvedC;
+            last24Hours.textContent = last24C;
+
+            const rate = total > 0 ? Math.round((resolvedC / total) * 100) : 0;
+            resolutionRate.textContent = rate + '%';
+
+            const newP = total > 0 ? Math.round((newC / total) * 100) : 0;
+            const inProgressP = total > 0 ? Math.round((inProgressC / total) * 100) : 0;
+            const resolvedP = total > 0 ? Math.round((resolvedC / total) * 100) : 0;
+
+            newBar.style.width = newP + '%';
+            newBar.textContent = newP > 10 ? 'New' : '';
+            inProgressBar.style.width = inProgressP + '%';
+            inProgressBar.textContent = inProgressP > 10 ? 'In Progress' : '';
+            resolvedBar.style.width = resolvedP + '%';
+            resolvedBar.textContent = resolvedP > 10 ? 'Resolved' : '';
+
+            newPercent.textContent = newP + '%';
+            inProgressPercent.textContent = inProgressP + '%';
+            resolvedPercent.textContent = resolvedP + '%';
+
+            lastUpdated.textContent = 'Updated: ' + new Date().toLocaleTimeString();
+
+        }, (error) => {
+            console.error('Error listening to enquiries:', error);
+            totalEnquiries.textContent = 'Error';
+            lastUpdated.textContent = 'Connection failed';
+        });
+    </script>
+</body>
+</html>
